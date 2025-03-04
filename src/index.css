@@ -1,0 +1,36 @@
+@import url("https://fonts.googleapis.com/css2?family=Inter:ital,opsz,wght@0,14..32,100..900;1,14..32,100..900&display=swap");
+
+@import "tailwindcss";
+
+@theme {
+  --color-beige: #f5f0ed;
+  --color-dark-beige: #e4d6ce;
+}
+
+@layer utilities {
+  .side-padding {
+    @apply px-2.5 sm:px-5;
+  }
+
+  .main-border-radius {
+    @apply rounded-b-4xl
+  }
+}
+
+:root {
+  font-family: Inter, system-ui, Avenir, Helvetica, Arial, sans-serif;
+  background-color: black;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+
+
+@media (pointer: coarse) {
+  .disable-hover {
+    pointer-events: none;
+  }
+}
+
