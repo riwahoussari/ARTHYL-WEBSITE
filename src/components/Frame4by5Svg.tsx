@@ -1,14 +1,18 @@
-import { MotionValue, useTransform, motion } from "motion/react";
-import { SVGProps } from "react";
+import { MotionValue, useTransform, motion } from "motion/react"
+import { SVGProps, useEffect } from "react"
 
 export default function Frame4by5({
   progress,
   ...props
 }: { progress: MotionValue<number> } & SVGProps<SVGSVGElement>) {
-  const path1Progress = useTransform(progress, [0, 0.25], [0, 1]);
-  const path2Progress = useTransform(progress, [0.25, 0.5], [0, 1]);
-  const path3Progress = useTransform(progress, [0.5, 0.75], [0, 1]);
-  const path4Progress = useTransform(progress, [0.75, 1], [0, 1]);
+  const path1Progress = useTransform(progress, [0, 0.25], [0, 1])
+  const path2Progress = useTransform(progress, [0.25, 0.5], [0, 1])
+  const path3Progress = useTransform(progress, [0.5, 0.75], [0, 1])
+  const path4Progress = useTransform(progress, [0.75, 1], [0, 1])
+
+  useEffect(() => {
+    console.log(progress)
+  }, [progress])
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"
@@ -41,5 +45,5 @@ export default function Frame4by5({
         style={{ pathLength: path4Progress, rotate: 180 }}
       />
     </svg>
-  );
+  )
 }

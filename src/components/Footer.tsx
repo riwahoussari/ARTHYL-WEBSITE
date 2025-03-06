@@ -1,25 +1,25 @@
-import { Link } from "react-router-dom";
-import { PAGES, SOCIALS_LINKS } from "../utils/constants";
-import ArrowSvg from "./ArrowSvg";
-import { HoverLink1 } from "./HoverLink";
-import { motion } from "motion/react";
-import useMousePosition from "../utils/useMousePosition";
-import { useRef, useState } from "react";
+import { Link } from "react-router-dom"
+import { PAGES, SOCIALS_LINKS } from "../utils/constants"
+import ArrowSvg from "./ArrowSvg"
+import { HoverLink1 } from "./HoverLink"
+import { motion } from "motion/react"
+import useMousePosition from "../utils/useMousePosition"
+import { useRef, useState } from "react"
 
 export default function Footer() {
-  const { x, y } = useMousePosition();
-  const footerRef = useRef<HTMLDivElement>(null);
-  const [hover, setHover] = useState(false);
+  const { x, y } = useMousePosition()
+  const footerRef = useRef<HTMLDivElement>(null)
+  const [hover, setHover] = useState(false)
 
   return (
     <>
       <footer
         ref={footerRef}
-        className="sticky bottom-0 z-0 flex h-dvh flex-col justify-between bg-black text-white"
+        className="sticky bottom-0 z-0 flex h-dvh flex-col justify-between bg-black text-white overflow-hidden"
       >
         {/* cursor */}
         <motion.div
-          className="absolute z-1 hidden aspect-square w-6 items-center justify-center rounded-full bg-white mix-blend-difference lg:flex"
+          className="absolute opacity-0 z-1  aspect-square w-6 items-center justify-center rounded-full bg-white mix-blend-difference lg:opacity-100 flex"
           animate={{
             top: y - (footerRef.current?.getBoundingClientRect().top || 0) || 0,
             left: x || 0,
@@ -58,6 +58,7 @@ export default function Footer() {
               text: platform,
               to: url,
               tag: "a",
+              target: "_blank",
             }))}
           />
 
@@ -85,13 +86,13 @@ export default function Footer() {
         </div>
       </footer>
     </>
-  );
+  )
 }
 
 function FooterButton({
   setHover,
 }: {
-  setHover: React.Dispatch<React.SetStateAction<boolean>>;
+  setHover: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   return (
     <Link
@@ -122,7 +123,7 @@ function FooterButton({
         />
       </div>
     </Link>
-  );
+  )
 }
 
 function FooterLinksGroup({
@@ -131,10 +132,10 @@ function FooterLinksGroup({
   setHover,
   hover,
 }: {
-  title: string;
-  links: { text: string; to: string; tag: "a" | "Link" }[];
-  hover: boolean;
-  setHover: React.Dispatch<React.SetStateAction<boolean>>;
+  title: string
+  links: { text: string; to: string; tag: "a" | "Link"; target?: string }[]
+  hover: boolean
+  setHover: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   return (
     <div className="grow-1">
@@ -145,7 +146,7 @@ function FooterLinksGroup({
         <FooterLink2 links={links} setHover={setHover} hover={hover} />
       </div>
     </div>
-  );
+  )
 }
 
 function FooterLink2({
@@ -153,30 +154,32 @@ function FooterLink2({
   setHover,
   hover,
 }: {
-  links: { text: string; to: string; tag: "a" | "Link" }[];
-  hover: boolean;
-  setHover: React.Dispatch<React.SetStateAction<boolean>>;
+  links: { text: string; to: string; tag: "a" | "Link"; target?: string }[]
+  hover: boolean
+  setHover: React.Dispatch<React.SetStateAction<boolean>>
 }) {
   return (
     <>
-      {links.map(({ text, to, tag }) => (
+      {links.map(({ text, to, tag, target }) => (
         <div
           key={text}
-          className={`w-max py-2.5 ${hover && "opacity-20"} duration-200 ease-in-out hover:opacity-100`}
+          className={`w-max py-2.5 ${
+            hover && " md:opacity-20 "
+          } duration-200 ease-in-out hover:opacity-100`}
           onMouseOver={() => setHover(true)}
           onMouseOut={() => setHover(false)}
         >
           {tag === "a" ? (
-            <HoverLink1 tag="a" href={to}>
+            <HoverLink1 tag="a" target={target ? target : "_self"} href={to}>
               {text}
             </HoverLink1>
           ) : (
-            <HoverLink1 tag="Link" to={to}>
+            <HoverLink1 tag="Link" target={target ? target : "_self"} to={to}>
               {text}
             </HoverLink1>
           )}
         </div>
       ))}
     </>
-  );
+  )
 }

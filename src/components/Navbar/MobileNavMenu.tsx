@@ -6,9 +6,11 @@ import ArrowSvg from "../ArrowSvg";
 export default function MobileNavMenu({
   menuOpen,
   setMenuOpen,
+  ref
 }: {
   menuOpen: boolean;
   setMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  ref: React.RefObject<HTMLDivElement | null>
 }) {
   return (
     <>
@@ -20,6 +22,7 @@ export default function MobileNavMenu({
             animate="enter"
             exit="exit"
             className="absolute top-0 right-0 left-0 z-0 bg-dark-beige/50 pt-16 pb-6 text-black uppercase shadow-lg backdrop-blur-xl sm:hidden"
+            ref={ref}
           >
             <nav>
               {PAGES.map((page, i) => {

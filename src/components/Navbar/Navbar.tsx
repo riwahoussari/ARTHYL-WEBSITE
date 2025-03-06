@@ -1,28 +1,57 @@
-import { Link } from "react-router-dom";
-import arthylSignaturePng from "../../assets/Arthyl-Signature.png";
-import Button from "../Button";
-import { useState } from "react";
-import BurgerMenuSvg from "./BurgerMenuSvg";
-import MobileNavMenu from "./MobileNavMenu";
-import { EASE_IN_OUT_CUBIC, PAGES } from "../../utils/constants";
-import { motion, useMotionValueEvent, useScroll } from "motion/react";
-import HoverLink from "../HoverLink";
+import { Link } from "react-router-dom"
+import arthylSignaturePng from "../../assets/Arthyl-Signature.png"
+import Button from "../Button"
+import { useEffect, useRef, useState } from "react"
+import BurgerMenuSvg from "./BurgerMenuSvg"
+import MobileNavMenu from "./MobileNavMenu"
+import { PAGES } from "../../utils/constants"
+import { motion, useMotionValueEvent, useScroll } from "motion/react"
+import HoverLink from "../HoverLink"
 
 export default function Navbar() {
-  const [menuOpen, setMenuOpen] = useState(false);
+  const [menuOpen, setMenuOpen] = useState(false)
 
-  const [hideNav, setHideNav] = useState(false);
-  const { scrollY } = useScroll();
+  const [hideNav, setHideNav] = useState(false)
+  const { scrollY } = useScroll()
+
+  const [hasMounted, setHasMounted] = useState(false)
+
+  useEffect(() => {
+    setHasMounted(true)
+  }, [])
 
   useMotionValueEvent(scrollY, "change", (latest) => {
-    const previous = scrollY.getPrevious() || 0;
+    const previous = scrollY.getPrevious() || 0
 
     if (latest > previous && latest > 50) {
-      setHideNav(true); // Hide navbar when scrolling down
+      setHideNav(true) // Hide navbar when scrolling down
     } else {
-      setHideNav(false); // Show navbar when scrolling up
+      setHideNav(false) // Show navbar when scrolling up
     }
-  });
+  })
+
+  const mobileMenuRef = useRef<HTMLDivElement>(null)
+  const burgerMenuRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    function handleClickOutside(e: MouseEvent) {
+      if (
+        mobileMenuRef.current &&
+        !mobileMenuRef.current.contains(e.target as Node) &&
+        !burgerMenuRef.current?.contains(e.target as Node)
+      ) {
+        setMenuOpen(false) // Close menu if clicked outside
+      }
+    }
+
+    if (menuOpen) {
+      document.addEventListener("mousedown", handleClickOutside)
+    } else {
+      document.removeEventListener("mousedown", handleClickOutside)
+    }
+
+    return () => document.removeEventListener("mousedown", handleClickOutside)
+  }, [menuOpen])
 
   return (
     <motion.header
@@ -30,9 +59,15 @@ export default function Navbar() {
         "side-padding fixed top-0 z-10 flex w-full items-center justify-between border-b border-[rgba(0,0,0,0.2)] bg-beige/50 py-2 text-sm text-black lg:text-base " +
         (menuOpen ? "sm:backdrop-blur-md" : " backdrop-blur-md")
       }
-      initial={{ y: 0 }}
-      animate={{ y: hideNav && !menuOpen ? "-100%" : 0 }}
-      transition={{ duration: 0.3, ease: EASE_IN_OUT_CUBIC }}
+      initial={{ y: "-100%" }}
+      animate={{
+        y: hasMounted ? (hideNav && !menuOpen ? "-100%" : "0%") : "0%",
+      }}
+      transition={{
+        duration: hasMounted ? 0.3 : 0.7,
+        ease: "easeInOut",
+        delay: hasMounted ? 0 : 0.3,
+      }}
     >
       {/* LOGO */}
       <Link to="/">
@@ -53,7 +88,7 @@ export default function Navbar() {
             <HoverLink tag="Link" to={page.link} key={i}>
               {page.name}
             </HoverLink>
-          );
+          )
         })}
       </nav>
 
@@ -71,6 +106,7 @@ export default function Navbar() {
         </Link>
 
         <div
+          ref={burgerMenuRef}
           className="w-7 sm:hidden"
           onClick={() => setMenuOpen((prev) => !prev)}
         >
@@ -79,8 +115,11 @@ export default function Navbar() {
       </div>
 
       {/* Mobile Menu */}
-      <MobileNavMenu menuOpen={menuOpen} setMenuOpen={setMenuOpen} />
+      <MobileNavMenu
+        ref={mobileMenuRef}
+        menuOpen={menuOpen}
+        setMenuOpen={setMenuOpen}
+      />
     </motion.header>
-  );
+  )
 }
-

@@ -1,16 +1,16 @@
-import PageTitle from "../components/PageTitle";
-import Button from "../components/Button";
-import { SHOP_ITEMS, ShopItem } from "../utils/constants";
-import useMousePosition from "../utils/useMousePosition";
-import { motion, useMotionValueEvent, useScroll } from "motion/react";
-import { useState } from "react";
+import PageTitle from "../components/PageTitle"
+import Button from "../components/Button"
+import { SHOP_ITEMS, ShopItem } from "../utils/constants"
+import useMousePosition from "../utils/useMousePosition"
+import { motion, useInView, useMotionValueEvent, useScroll } from "motion/react"
+import { useRef, useState } from "react"
 
 const ODD_ITEMS = SHOP_ITEMS.map((item, i) => {
-  if ((i + 1) % 2 === 1) return item;
-}).filter((item) => item !== undefined);
+  if ((i + 1) % 2 === 1) return item
+}).filter((item) => item !== undefined)
 const EVEN_ITEMS = SHOP_ITEMS.map((item, i) => {
-  if ((i + 1) % 2 === 0) return item;
-}).filter((item) => item !== undefined);
+  if ((i + 1) % 2 === 0) return item
+}).filter((item) => item !== undefined)
 
 export default function ShopPage() {
   // const [layout, setLayout] = useState(2);
@@ -27,21 +27,21 @@ export default function ShopPage() {
       {layout === 2 && <Layout2 />} */}
       <Layout2 />
     </>
-  );
+  )
 }
 
 function Layout2() {
-  const { x, y } = useMousePosition();
-  const { scrollY } = useScroll();
-  const [scrollYValue, setScrollYValue] = useState(0);
+  const { x, y } = useMousePosition()
+  const { scrollY } = useScroll()
+  const [scrollYValue, setScrollYValue] = useState(0)
   const [smImgSrc, setSmImgSrc] = useState<{
-    src: string | undefined;
-    hovering: boolean;
-  }>({ src: undefined, hovering: false });
+    src: string | undefined
+    hovering: boolean
+  }>({ src: undefined, hovering: false })
 
   useMotionValueEvent(scrollY, "change", () => {
-    setScrollYValue(scrollY.get());
-  });
+    setScrollYValue(scrollY.get())
+  })
   return (
     <>
       <PageTitle>Shop</PageTitle>
@@ -113,7 +113,7 @@ function Layout2() {
         />
       </motion.div>
     </>
-  );
+  )
 }
 
 function Card2({
@@ -126,31 +126,39 @@ function Card2({
 }: ShopItem & {
   setSmImgSrc: React.Dispatch<
     React.SetStateAction<{
-      src: string | undefined;
-      hovering: boolean;
+      src: string | undefined
+      hovering: boolean
     }>
-  >;
+  >
 }) {
+  const cardRef = useRef<HTMLDivElement>(null)
+  const isInView = useInView(cardRef, { once: true })
   function onEnter() {
-    setSmImgSrc({ src: secondImageSrcUrl, hovering: true });
+    setSmImgSrc({ src: secondImageSrcUrl, hovering: true })
   }
   function onLeave() {
-    setSmImgSrc((prev) => ({ ...prev, hovering: false }));
+    setSmImgSrc((prev) => ({ ...prev, hovering: false }))
   }
   return (
-    <div className="group relative mx-auto w-full max-w-[400px] cursor-pointer space-y-3 md:mx-0 md:w-[45vw] md:max-w-[800px]">
-      <div
+    <div
+      ref={cardRef}
+      className="group relative mx-auto w-full max-w-[400px] cursor-pointer space-y-3 md:mx-0 md:w-[45vw] md:max-w-[800px] "
+    >
+      <motion.div
+        
+        initial={{ clipPath: "inset(25% 25% 25% 25% )" }}
+        animate={isInView ? { clipPath: "inset(0 0 0 0)" } : {}}
+        transition={{ duration: 0.5, ease: "easeInOut" }}
         onMouseEnter={onEnter}
         onMouseLeave={onLeave}
-        style={{ boxShadow: "0 0 20px #00000060" }}
-        className="aspect-square w-full max-w-[400px] overflow-hidden rounded-xl bg-[conic-gradient(white_25%,theme(colors.gray.200)_25%_50%,white_50%_75%,theme(colors.gray.200)_75%)] bg-[size:50px_50px] md:w-[45vw] md:max-w-[800px]"
+        className="aspect-square w-full max-w-[400px] overflow-hidden rounded-xl bg-[conic-gradient(white_25%,theme(colors.gray.200)_25%_50%,white_50%_75%,theme(colors.gray.200)_75%)] bg-[size:50px_50px] md:w-[45vw] md:max-w-[800px] "
       >
         <img
           src={imageSrcUrl || undefined}
           alt={`Photo of ${title} artpiece.`}
           className="h-full w-full object-cover duration-200 ease-in-out group-hover:scale-110"
         />
-      </div>
+      </motion.div>
 
       <div className="flex flex-col items-start gap-2 xl:flex-row xl:items-end xl:justify-between xl:gap-6">
         <div>
@@ -166,7 +174,7 @@ function Card2({
         </div>
       </div>
     </div>
-  );
+  )
 }
 
 // function Layout1() {
