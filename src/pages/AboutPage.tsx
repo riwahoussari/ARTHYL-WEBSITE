@@ -6,7 +6,7 @@ import {
   useTransform,
 } from "motion/react"
 import PageTitle from "../components/PageTitle"
-import { HTMLAttributes, useRef } from "react"
+import { HTMLAttributes, useEffect, useRef, useState } from "react"
 import { ABOUT_ME_PARAGRAPHS } from "../utils/constants"
 import Frame4by5 from "../components/Frame4by5Svg"
 
@@ -123,7 +123,7 @@ function Paragraph({
         <motion.div style={{ y: parallax }}>
           <Title isInView={isInView}>{title}</Title>
         </motion.div>
-        <Text isInView={isInView}>{text}</Text>
+        <Text>{text}</Text>
       </div>
     </div>
   )
@@ -159,26 +159,81 @@ function Title({
   )
 }
 
-function Text({ children, isInView }: { children: string; isInView: boolean }) {
+// function Text({ children, isInView }: { children: string; isInView: boolean }) {
+//   const words = children.split(" ")
+
+//   return (
+//     <p className="flex flex-wrap gap-y-0 text-[min(6vw,26px)] opacity-80 md:gap-y-2 md:text-3xl lg:justify-start lg:text-[28px] xl:text-3xl">
+//       {words.map((word, i) => {
+//         return (
+//           <motion.span
+//             key={i}
+//             className="me-[min(2vw,9px)] md:me-3"
+//             initial={{ y: 60, opacity: 0.5 }}
+//             animate={isInView ? { y: 0, opacity: 1 } : {}}
+//             transition={{
+//               duration: 0.5,
+//               ease: "easeInOut",
+//               delay: i * (0.5 / words.length),
+//             }}
+//           >
+//             {word}
+//           </motion.span>
+//         )
+//       })}
+//     </p>
+//   )
+// }
+
+function Text({ children }: { children: string }) {
   const words = children.split(" ")
+  const paragraphRef = useRef<HTMLParagraphElement>(null)
+  const { scrollYProgress } = useScroll({
+    target: paragraphRef,
+    offset: ["start end", "end 85%"],
+  })
+
+  const [animationComplete, setAnimationComplete] = useState(false)
+
+  useEffect(() => {
+    const unsubscribe = scrollYProgress.on("change", (v) => {
+      if (v >= 1) {
+        setAnimationComplete(true)
+      }
+    })
+    return () => unsubscribe()
+  }, [scrollYProgress])
+
+  function Word({
+    children,
+    range,
+  }: {
+    children: string
+    range: [number, number]
+  }) {
+    let opacity = useTransform(scrollYProgress, range, [0.15, 1])
+    return (
+      <motion.span
+        style={{ opacity: animationComplete ? 1 : opacity }}
+        className="me-[min(2vw,9px)] md:me-3"
+      >
+        {children}
+      </motion.span>
+    )
+  }
 
   return (
-    <p className="flex flex-wrap gap-y-0 text-[min(6vw,26px)] opacity-80 md:gap-y-2 md:text-3xl lg:justify-start lg:text-[28px] xl:text-3xl">
+    <p
+      ref={paragraphRef}
+      className="flex flex-wrap gap-y-0 text-[min(6vw,26px)] opacity-80 md:gap-y-2 md:text-3xl lg:justify-start lg:text-[28px] xl:text-3xl"
+    >
       {words.map((word, i) => {
+        let start = i / words.length
+        let end = (i + 1) / words.length
         return (
-          <motion.span
-            key={i}
-            className="me-[min(2vw,9px)] md:me-3"
-            initial={{ y: 60, opacity: 0.5 }}
-            animate={isInView ? { y: 0, opacity: 1 } : {}}
-            transition={{
-              duration: 0.5,
-              ease: "easeInOut",
-              delay: i * (0.5 / words.length),
-            }}
-          >
+          <Word key={i} range={[start, end]}>
             {word}
-          </motion.span>
+          </Word>
         )
       })}
     </p>
