@@ -64,3 +64,13 @@ export const ABOUT_ME_PARAGRAPHS = [
     text: "Through my art, I aim to bridge the worlds of creativity and business, offering a perspective that celebrates ambition and the beauty of challenges. My work is a signature of growth, meant to inspire those who see themselves not just as spectators, but as achievers.",
   },
 ];
+
+
+// home page
+// hero
+export const ROTATING_TEXT = {
+  // text: "--------------------------------",
+  text: "obsidian - obsidian - ",
+  sold_number: 1,
+  total_number: 10,
+}

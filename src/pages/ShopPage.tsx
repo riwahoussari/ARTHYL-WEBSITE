@@ -13,18 +13,9 @@ const EVEN_ITEMS = SHOP_ITEMS.map((item, i) => {
 }).filter((item) => item !== undefined)
 
 export default function ShopPage() {
-  // const [layout, setLayout] = useState(2);
 
   return (
     <>
-      {/* <button
-        className="absolute top-20 left-10 z-2 rounded-full bg-black px-4 py-2 text-white hover:bg-white hover:text-black"
-        onClick={() => setLayout((layout % 2) + 1)}
-      >
-        Switch Layout
-      </button> */}
-      {/* {layout === 1 && <Layout1 />}
-      {layout === 2 && <Layout2 />} */}
       <Layout2 />
     </>
   )
@@ -48,7 +39,7 @@ function Layout2() {
 
       {/* Cards Container */}
 
-      <section className="side-padding flex flex-col items-stretch md:flex-row md:items-start md:justify-around md:gap-5">
+      <section className="side-padding max-w-[2000px] mx-auto flex flex-col items-stretch md:flex-row md:items-start md:justify-around md:gap-5">
         {/* column 1 */}
         <div>
           {ODD_ITEMS.map((item, i) => (
@@ -151,7 +142,7 @@ function Card2({
         transition={{ duration: 0.5, ease: "easeInOut" }}
         onMouseEnter={onEnter}
         onMouseLeave={onLeave}
-        className="aspect-square w-full max-w-[400px] overflow-hidden rounded-xl bg-[conic-gradient(white_25%,theme(colors.gray.200)_25%_50%,white_50%_75%,theme(colors.gray.200)_75%)] bg-[size:50px_50px] md:w-[45vw] md:max-w-[800px] "
+        className="bg-placeholder aspect-square w-full max-w-[400px] overflow-hidden rounded-xl md:w-[45vw] md:max-w-[800px] "
       >
         <img
           src={imageSrcUrl || undefined}
@@ -177,49 +168,3 @@ function Card2({
   )
 }
 
-// function Layout1() {
-//   return (
-//     <>
-//       <PageTitle>Shop</PageTitle>
-//       <section className="mx-auto flex min-h-dvh flex-col flex-wrap items-center gap-[100px] md:max-w-[1440px] md:flex-row md:items-start md:justify-center">
-//         {SHOP_ITEMS.map((item, i) => (
-//           <Card1
-//             key={i}
-//             imageSrcUrl={item.imageSrcUrl}
-//             title={item.title}
-//             remainingStock={item.remainingStock}
-//             totalStock={item.totalStock}
-//             secondImageSrcUrl=""
-//           />
-//         ))}
-//       </section>
-//     </>
-//   );
-// }
-
-// function Card1({ title, totalStock, remainingStock, imageSrcUrl }: ShopItem) {
-//   return (
-//     <div className="group w-full max-w-[360px] cursor-pointer space-y-3 md:max-w-[400px]">
-//       <div
-//         style={{ boxShadow: "0 0 20px #00000060" }}
-//         className="aspect-square w-full max-w-[360px] overflow-hidden rounded-xl bg-[conic-gradient(white_25%,theme(colors.gray.200)_25%_50%,white_50%_75%,theme(colors.gray.200)_75%)] bg-[size:50px_50px] md:max-w-[400px]"
-//       >
-//         <img
-//           src={imageSrcUrl}
-//           alt={`Photo of ${title} artpiece.`}
-//           className="h-full w-full object-cover duration-200 ease-in-out group-hover:scale-110"
-//         />
-//       </div>
-
-//       <div>
-//         <p className="text-2xl font-medium md:text-3xl">{title}</p>
-//         <p className="text-base opacity-70 md:text-lg">
-//           {remainingStock}/{totalStock} Remaining
-//         </p>
-//       </div>
-//       <Button arrow={true} size="lg">
-//         Artify Your Space
-//       </Button>
-//     </div>
-//   );
-// }

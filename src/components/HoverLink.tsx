@@ -97,12 +97,12 @@ export function HoverLink1({ tag, children, ...props }: HoverLinkProps) {
         <span className="opacity-0">{children}</span>
 
         {/* Text moves up & into view on hover */}
-        <span className="absolute top-full duration-200 ease-in-out group-hover:top-0">
+        <span {...props} className="absolute top-full duration-200 ease-in-out group-hover:top-0">
           {children}
         </span>
 
         {/* Text moves up & out of view on hover */}
-        <span className="absolute bottom-0 duration-200 ease-in-out group-hover:bottom-full">
+        <span {...props} className="absolute bottom-0 duration-200 ease-in-out group-hover:bottom-full">
           {children}
         </span>
       </Link>

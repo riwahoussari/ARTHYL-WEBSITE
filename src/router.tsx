@@ -36,7 +36,7 @@ function PageLayout() {
   return (
     <>
       <Navbar />
-      <main className="bg-beige relative z-1 pt-12 text-black lg:pt-14 rounded-b-3xl md:rounded-b-4xl lg:rounded-b-5xl xl:rounded-b-6xl">
+      <main className="bg-beige relative z-1 pt-12 text-black lg:pt-14 rounded-b-3xl md:rounded-b-4xl lg:rounded-b-5xl xl:rounded-b-6xl min-h-dvh">
         <Outlet />
       </main>
       <Footer />

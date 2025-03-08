@@ -13,7 +13,27 @@
   }
 
   .main-border-radius {
-    @apply rounded-b-4xl
+    @apply rounded-b-4xl;
+  }
+
+  .bg-placeholder { 
+    @apply bg-[conic-gradient(white_25%,theme(colors.gray.200)_25%_50%,white_50%_75%,theme(colors.gray.200)_75%)] bg-[size:50px_50px] 
+  }
+
+  .axiom-text {
+    text-shadow: 2px 2px 4px rgba(0, 47, 255, 0.2),
+      -2px -2px 4px rgba(238, 255, 0, 0.2), 2px -2px 4px rgba(255, 0, 191, 0.2),
+      -2px 2px 4px rgba(255, 0, 0, 0.2);
+
+      background: linear-gradient(to left, 
+      #002FFF 0%, 
+      #9747FF 25%, 
+      #FF00BF 50%, 
+      #FF0000 75%, 
+      #EEFF00 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+
   }
 }
 
@@ -26,11 +46,8 @@
   -moz-osx-font-smoothing: grayscale;
 }
 
-
-
 @media (pointer: coarse) {
   .disable-hover {
     pointer-events: none;
   }
 }
-

@@ -1,10 +1,9 @@
-import { Link } from "react-router-dom"
+import { Link, LinkProps } from "react-router-dom"
 import { PAGES, SOCIALS_LINKS } from "../utils/constants"
 import ArrowSvg from "./ArrowSvg"
-import { HoverLink1 } from "./HoverLink"
 import { motion } from "motion/react"
 import useMousePosition from "../utils/useMousePosition"
-import { useRef, useState } from "react"
+import { AnchorHTMLAttributes, useRef, useState } from "react"
 
 export default function Footer() {
   const { x, y } = useMousePosition()
@@ -19,7 +18,7 @@ export default function Footer() {
       >
         {/* cursor */}
         <motion.div
-          className="absolute opacity-0 z-1  aspect-square w-6 items-center justify-center rounded-full bg-white mix-blend-difference lg:opacity-100 flex"
+          className="absolute opacity-0 z-0  aspect-square w-6 items-center justify-center rounded-full bg-white mix-blend-difference lg:opacity-100 flex"
           animate={{
             top: y - (footerRef.current?.getBoundingClientRect().top || 0) || 0,
             left: x || 0,
@@ -103,12 +102,15 @@ function FooterButton({
     >
       {/* text */}
       <div className="flex w-full items-center justify-start pl-4 text-[min(128px,9vw)] md:pl-12">
-        <div className="relative overflow-hidden">
+        <div className="relative overflow-hidden ">
+          {/* invisible placeholder */}
           <p className="opacity-0">Let's Connect</p>
-          <p className="absolute bottom-1/2 translate-y-1/2 duration-200 ease-in-out group-hover:bottom-[100%] group-hover:translate-y-0">
+          {/* text that moves out of view */}
+          <p className="absolute z-2 bottom-1/2 translate-y-1/2 duration-200 ease-in-out group-hover:bottom-[100%] group-hover:translate-y-0">
             Let's Connect
           </p>
-          <p className="absolute top-[100%] duration-200 ease-in-out group-hover:top-1/2 group-hover:-translate-y-1/2">
+          {/* text that moves into view */}
+          <p className="absolute z-2 top-[100%] duration-200 ease-in-out group-hover:top-1/2 group-hover:-translate-y-1/2">
             Let's Connect
           </p>
         </div>
@@ -163,23 +165,77 @@ function FooterLink2({
       {links.map(({ text, to, tag, target }) => (
         <div
           key={text}
-          className={`w-max py-2.5 ${
+          className={`w-max my-2.5 ${
             hover && " md:opacity-20 "
           } duration-200 ease-in-out hover:opacity-100`}
           onMouseOver={() => setHover(true)}
           onMouseOut={() => setHover(false)}
         >
           {tag === "a" ? (
-            <HoverLink1 tag="a" target={target ? target : "_self"} href={to}>
+            <FooterLink tag="a" target={target ? target : "_self"} href={to}>
               {text}
-            </HoverLink1>
+            </FooterLink>
           ) : (
-            <HoverLink1 tag="Link" target={target ? target : "_self"} to={to}>
+            <FooterLink tag="Link" target={target ? target : "_self"} to={to}>
+              {/* <span > */}
               {text}
-            </HoverLink1>
+              {/* </span> */}
+            </FooterLink>
           )}
         </div>
       ))}
     </>
   )
+}
+
+type FooterLinkProps =
+  | ({ tag: "Link"; children: string } & LinkProps)
+  | ({ tag: "a"; children: string } & AnchorHTMLAttributes<HTMLAnchorElement>)
+
+export function FooterLink({ tag, children, ...props }: FooterLinkProps) {
+  if (tag === "Link") {
+    const linkProps = props as LinkProps
+    return (
+      <Link
+        {...linkProps}
+        className="group relative flex overflow-hidden"
+      >
+        {/* Invisible placeholder to maintain height) */}
+        <span className="opacity-0">{children}</span>
+
+        {/* Text moves up & into view on hover */}
+        <span
+          {...props}
+          className="absolute top-full duration-200 ease-in-out group-hover:top-0 bg-white  mix-blend-difference text-transparent bg-clip-text"
+        >
+          {children}
+        </span>
+
+        {/* Text moves up & out of view on hover */}
+        <span
+          {...props}
+          className="absolute bottom-0 duration-200 ease-in-out group-hover:bottom-full bg-white  mix-blend-difference text-transparent bg-clip-text"
+        >
+          {children}
+        </span>
+      </Link>
+    )
+  } else if (tag === "a") {
+    return (
+      <a {...props} className="group relative flex overflow-hidden">
+        {/* Invisible placeholder to maintain height) */}
+        <span className="opacity-0">{children}</span>
+
+        {/* Text moves up & into view on hover */}
+        <span className="absolute top-full duration-200 ease-in-out group-hover:top-0 bg-white  mix-blend-difference text-transparent bg-clip-text">
+          {children}
+        </span>
+
+        {/* Text moves up & out of view on hover */}
+        <span className="absolute bottom-0 duration-200 ease-in-out group-hover:bottom-full bg-white  mix-blend-difference text-transparent bg-clip-text">
+          {children}
+        </span>
+      </a>
+    )
+  }
 }
