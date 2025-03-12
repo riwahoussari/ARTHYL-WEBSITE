@@ -1,24 +1,24 @@
-import { Link, LinkProps } from "react-router-dom"
-import { PAGES, SOCIALS_LINKS } from "../utils/constants"
-import ArrowSvg from "./ArrowSvg"
-import { motion } from "motion/react"
-import useMousePosition from "../utils/useMousePosition"
-import { AnchorHTMLAttributes, useRef, useState } from "react"
+import { Link, LinkProps } from "react-router-dom";
+import { PAGES, SOCIALS_LINKS } from "../utils/constants";
+import ArrowSvg from "./ArrowSvg";
+import { motion } from "motion/react";
+import useMousePosition from "../utils/useMousePosition";
+import { AnchorHTMLAttributes, useRef, useState } from "react";
 
 export default function Footer() {
-  const { x, y } = useMousePosition()
-  const footerRef = useRef<HTMLDivElement>(null)
-  const [hover, setHover] = useState(false)
+  const { x, y } = useMousePosition();
+  const footerRef = useRef<HTMLDivElement>(null);
+  const [hover, setHover] = useState(false);
 
   return (
     <>
       <footer
         ref={footerRef}
-        className="sticky bottom-0 z-0 flex h-dvh flex-col justify-between bg-black text-white overflow-hidden"
+        className="sticky bottom-0 z-0 flex h-dvh flex-col justify-between overflow-hidden bg-black pb-2 text-white"
       >
         {/* cursor */}
         <motion.div
-          className="absolute opacity-0 z-0  aspect-square w-6 items-center justify-center rounded-full bg-white mix-blend-difference lg:opacity-100 flex"
+          className="absolute z-0 flex aspect-square w-6 items-center justify-center rounded-full bg-white opacity-0 mix-blend-difference lg:opacity-100"
           animate={{
             top: y - (footerRef.current?.getBoundingClientRect().top || 0) || 0,
             left: x || 0,
@@ -85,13 +85,13 @@ export default function Footer() {
         </div>
       </footer>
     </>
-  )
+  );
 }
 
 function FooterButton({
   setHover,
 }: {
-  setHover: React.Dispatch<React.SetStateAction<boolean>>
+  setHover: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
     <Link
@@ -102,15 +102,15 @@ function FooterButton({
     >
       {/* text */}
       <div className="flex w-full items-center justify-start pl-4 text-[min(128px,9vw)] md:pl-12">
-        <div className="relative overflow-hidden ">
+        <div className="relative overflow-hidden">
           {/* invisible placeholder */}
           <p className="opacity-0">Let's Connect</p>
           {/* text that moves out of view */}
-          <p className="absolute z-2 bottom-1/2 translate-y-1/2 duration-200 ease-in-out group-hover:bottom-[100%] group-hover:translate-y-0">
+          <p className="absolute bottom-1/2 z-2 translate-y-1/2 duration-200 ease-in-out group-hover:bottom-[100%] group-hover:translate-y-0">
             Let's Connect
           </p>
           {/* text that moves into view */}
-          <p className="absolute z-2 top-[100%] duration-200 ease-in-out group-hover:top-1/2 group-hover:-translate-y-1/2">
+          <p className="absolute top-[100%] z-2 duration-200 ease-in-out group-hover:top-1/2 group-hover:-translate-y-1/2">
             Let's Connect
           </p>
         </div>
@@ -125,7 +125,7 @@ function FooterButton({
         />
       </div>
     </Link>
-  )
+  );
 }
 
 function FooterLinksGroup({
@@ -134,10 +134,10 @@ function FooterLinksGroup({
   setHover,
   hover,
 }: {
-  title: string
-  links: { text: string; to: string; tag: "a" | "Link"; target?: string }[]
-  hover: boolean
-  setHover: React.Dispatch<React.SetStateAction<boolean>>
+  title: string;
+  links: { text: string; to: string; tag: "a" | "Link"; target?: string }[];
+  hover: boolean;
+  setHover: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
     <div className="grow-1">
@@ -148,7 +148,7 @@ function FooterLinksGroup({
         <FooterLink2 links={links} setHover={setHover} hover={hover} />
       </div>
     </div>
-  )
+  );
 }
 
 function FooterLink2({
@@ -156,17 +156,17 @@ function FooterLink2({
   setHover,
   hover,
 }: {
-  links: { text: string; to: string; tag: "a" | "Link"; target?: string }[]
-  hover: boolean
-  setHover: React.Dispatch<React.SetStateAction<boolean>>
+  links: { text: string; to: string; tag: "a" | "Link"; target?: string }[];
+  hover: boolean;
+  setHover: React.Dispatch<React.SetStateAction<boolean>>;
 }) {
   return (
     <>
       {links.map(({ text, to, tag, target }) => (
         <div
           key={text}
-          className={`w-max my-2.5 ${
-            hover && " md:opacity-20 "
+          className={`my-2.5 w-max ${
+            hover && "md:opacity-20"
           } duration-200 ease-in-out hover:opacity-100`}
           onMouseOver={() => setHover(true)}
           onMouseOut={() => setHover(false)}
@@ -185,28 +185,25 @@ function FooterLink2({
         </div>
       ))}
     </>
-  )
+  );
 }
 
 type FooterLinkProps =
   | ({ tag: "Link"; children: string } & LinkProps)
-  | ({ tag: "a"; children: string } & AnchorHTMLAttributes<HTMLAnchorElement>)
+  | ({ tag: "a"; children: string } & AnchorHTMLAttributes<HTMLAnchorElement>);
 
 export function FooterLink({ tag, children, ...props }: FooterLinkProps) {
   if (tag === "Link") {
-    const linkProps = props as LinkProps
+    const linkProps = props as LinkProps;
     return (
-      <Link
-        {...linkProps}
-        className="group relative flex overflow-hidden"
-      >
+      <Link {...linkProps} className="group relative flex overflow-hidden">
         {/* Invisible placeholder to maintain height) */}
         <span className="opacity-0">{children}</span>
 
         {/* Text moves up & into view on hover */}
         <span
           {...props}
-          className="absolute top-full duration-200 ease-in-out group-hover:top-0 bg-white  mix-blend-difference text-transparent bg-clip-text"
+          className="absolute top-full bg-white bg-clip-text text-transparent mix-blend-difference duration-200 ease-in-out group-hover:top-0"
         >
           {children}
         </span>
@@ -214,12 +211,12 @@ export function FooterLink({ tag, children, ...props }: FooterLinkProps) {
         {/* Text moves up & out of view on hover */}
         <span
           {...props}
-          className="absolute bottom-0 duration-200 ease-in-out group-hover:bottom-full bg-white  mix-blend-difference text-transparent bg-clip-text"
+          className="absolute bottom-0 bg-white bg-clip-text text-transparent mix-blend-difference duration-200 ease-in-out group-hover:bottom-full"
         >
           {children}
         </span>
       </Link>
-    )
+    );
   } else if (tag === "a") {
     return (
       <a {...props} className="group relative flex overflow-hidden">
@@ -227,15 +224,15 @@ export function FooterLink({ tag, children, ...props }: FooterLinkProps) {
         <span className="opacity-0">{children}</span>
 
         {/* Text moves up & into view on hover */}
-        <span className="absolute top-full duration-200 ease-in-out group-hover:top-0 bg-white  mix-blend-difference text-transparent bg-clip-text">
+        <span className="absolute top-full bg-white bg-clip-text text-transparent mix-blend-difference duration-200 ease-in-out group-hover:top-0">
           {children}
         </span>
 
         {/* Text moves up & out of view on hover */}
-        <span className="absolute bottom-0 duration-200 ease-in-out group-hover:bottom-full bg-white  mix-blend-difference text-transparent bg-clip-text">
+        <span className="absolute bottom-0 bg-white bg-clip-text text-transparent mix-blend-difference duration-200 ease-in-out group-hover:bottom-full">
           {children}
         </span>
       </a>
-    )
+    );
   }
 }

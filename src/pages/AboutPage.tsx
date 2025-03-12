@@ -6,7 +6,7 @@ import {
   useTransform,
 } from "motion/react"
 import PageTitle from "../components/PageTitle"
-import { HTMLAttributes, useEffect, useRef, useState } from "react"
+import { Fragment, HTMLAttributes, useEffect, useRef, useState } from "react"
 import { ABOUT_ME_PARAGRAPHS } from "../utils/constants"
 import Frame4by5 from "../components/Frame4by5Svg"
 
@@ -66,7 +66,7 @@ export default function AboutPage() {
         {/* text */}
         <div className="mx-auto w-[94vw] max-w-[500px] pt-[150px] pb-[60px] md:pb-[100px] md:max-w-[600px] lg:mx-0 lg:max-w-[500px] lg:space-y-[40vh] lg:py-[40vh] lg:pb-[25vh] lg:text-start xl:max-w-[600px] 2xl:max-w-[650px] ">
           {ABOUT_ME_PARAGRAPHS.map(({ title, text }, i) => (
-            <>
+            <Fragment key={i}>
               {/* line */}
               <div className="relative flex gap-x-[5%] items-center lg:h-0 overflow-hidden mt-[250px] mb-[100px] first-of-type:mt-0 opacity-80">
                 <motion.div
@@ -89,12 +89,12 @@ export default function AboutPage() {
 
               {/* text */}
               <Paragraph
-                key={i}
+                
                 parallax={titleParallaxes[i]}
                 title={title}
                 text={text}
               />
-            </>
+            </Fragment>
           ))}
         </div>
       </section>

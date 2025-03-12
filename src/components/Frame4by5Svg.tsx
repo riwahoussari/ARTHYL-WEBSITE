@@ -1,5 +1,5 @@
 import { MotionValue, useTransform, motion } from "motion/react"
-import { SVGProps, useEffect } from "react"
+import { SVGProps } from "react"
 
 export default function Frame4by5({
   progress,
@@ -10,9 +10,6 @@ export default function Frame4by5({
   const path3Progress = useTransform(progress, [0.5, 0.75], [0, 1])
   const path4Progress = useTransform(progress, [0.75, 1], [0, 1])
 
-  useEffect(() => {
-    console.log(progress)
-  }, [progress])
   return (
     <svg
       xmlns="http://www.w3.org/2000/svg"

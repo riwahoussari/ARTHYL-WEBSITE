@@ -35,6 +35,13 @@
   -webkit-text-fill-color: transparent;
 
   }
+
+  .why-dashes{
+    background-image: linear-gradient(to right,  black 33%, transparent 33%, transparent 66%, black 66%);
+    background-position: bottom left;
+    background-size: 20% 10px;
+    background-repeat: repeat-x;
+  }
 }
 
 :root {
